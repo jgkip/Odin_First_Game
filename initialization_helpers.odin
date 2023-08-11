@@ -41,6 +41,8 @@ CTX :: struct {
 	player_up_clips: [4]Pos, 
 	player_down_clips: [4]Pos, 
 
+	idle_frames: [10]Pos,
+
 	moving_left: bool, 
 	moving_right: bool, 
 	moving_up: bool, 
@@ -147,35 +149,42 @@ process_player_input :: proc() {
 
 update :: proc() {
 	speed: i32 = 3
-	animation_speed := SDL.GetTicks() / 200 // GetTicks gets the ms since SDL was initialized
+	animation_speed := SDL.GetTicks() / 200 
+	idle_speed := SDL.GetTicks() / 60 // GetTicks gets the ms since SDL was initialized
 	idx := animation_speed %% 4 // 0 - 3
+	idle_idx := idle_speed %% 10 // 0 - 3
+
+	src := ctx.idle_frames[idle_idx]
+	ctx.entities[2].source.x = src.x
+	ctx.entities[2].source.y = src.y
+	
 
 	// TODO: Animation system 
 	// Change the source sprite 
 	// then, move the destination rectangle 
 	if ctx.moving_left {
 		src := ctx.player_left_clips[idx]
-		ctx.entities[0].source.x = src.x 
-		ctx.entities[0].source.y = src.y 
-		ctx.entities[0].dest.x -= speed
+		ctx.entities[1].source.x = src.x 
+		ctx.entities[1].source.y = src.y 
+		ctx.entities[1].dest.x -= speed
 	}
 	if ctx.moving_down {
 		src := ctx.player_down_clips[idx]
-		ctx.entities[0].source.x = src.x
-		ctx.entities[0].source.y = src.y
-		ctx.entities[0].dest.y += speed
+		ctx.entities[1].source.x = src.x
+		ctx.entities[1].source.y = src.y
+		ctx.entities[1].dest.y += speed
 	}
 	if ctx.moving_right {
 		src := ctx.player_right_clips[idx]
-		ctx.entities[0].source.x = src.x
-		ctx.entities[0].source.y = src.y
-		ctx.entities[0].dest.x += speed
+		ctx.entities[1].source.x = src.x
+		ctx.entities[1].source.y = src.y
+		ctx.entities[1].dest.x += speed
 	}
 	if ctx.moving_up {
 		src := ctx.player_up_clips[idx]
-		ctx.entities[0].source.x = src.x
-		ctx.entities[0].source.y = src.y 
-		ctx.entities[0].dest.y -= speed
+		ctx.entities[1].source.x = src.x
+		ctx.entities[1].source.y = src.y 
+		ctx.entities[1].dest.y -= speed
 	}
 }
 

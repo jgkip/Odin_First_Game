@@ -5,8 +5,19 @@ import "core:log"
 import "core:os"
 import SDL "vendor:sdl2"
 import SDL_Image "vendor:sdl2/image"
- 
+
+PLAYER_W : i32 = 48
+PLAYER_H : i32 = 48
+
+load_frames_pos :: proc() {
+	num_frames := len(ctx.idle_frames)
+	for i := 0; i < num_frames; i += 1 {
+		ctx.idle_frames[i] = Pos{x = PLAYER_W * i32(i), y = 0}
+	}
+}
+
 main :: proc() {
+	load_frames_pos()
 	// Initializing SDL stuff 
 	context.logger = log.create_console_logger()
 
@@ -17,11 +28,30 @@ main :: proc() {
 	defer cleanup()
 	
 	// Load image 
+	ground_img : ^SDL.Surface = SDL_Image.Load("assets/ground.png")
 	player_img : ^SDL.Surface = SDL_Image.Load("assets/bardo.png")
+	player_idle : ^SDL.Surface = SDL_Image.Load("assets/idle.png")
 	box_img : ^SDL.Surface = SDL_Image.Load("assets/box.png")
 	apple_img : ^SDL.Surface = SDL_Image.Load("assets/Apple.png")
 	
 	// TODO: Better texture loading
+	append(&ctx.entities, Entity{
+		tex = SDL.CreateTextureFromSurface(ctx.renderer, ground_img), 
+		source = SDL.Rect{
+			// source sprite is down
+			x = 0, 
+			y = 0,
+			w = 256, 
+			h = 256,
+		},
+		dest = SDL.Rect{
+			x = 0, 
+			y = 0, 
+			w = 256 * 5,
+			h = 256 * 3,
+		},
+	})
+
 	// Create the player entity 
 	append(&ctx.entities, Entity{
 		tex = SDL.CreateTextureFromSurface(ctx.renderer, player_img), 
@@ -37,6 +67,24 @@ main :: proc() {
 			y = 100, 
 			w = 24 * 2,
 			h = 38 * 2,
+		},
+	})
+
+	// idle guy 
+	append(&ctx.entities, Entity{
+		tex = SDL.CreateTextureFromSurface(ctx.renderer, player_idle),
+		source = SDL.Rect{
+			// source sprite is down
+			x = 0, 
+			y = 0,
+			w = 48, 
+			h = 48,
+		},
+		dest = SDL.Rect{
+			x = 0, 
+			y = 0, 
+			w = 48 * 2,
+			h = 48 * 2,
 		},
 	})
 
