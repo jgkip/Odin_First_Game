@@ -228,9 +228,7 @@ main :: proc() {
 	// 3. Clear screen 
 	event : SDL.Event
 	state : [^]u8
-	loop() 
-	SDL.DestroyWindow(ctx.window)
-	SDL.Quit()
+	loop()
 } 
 
 
