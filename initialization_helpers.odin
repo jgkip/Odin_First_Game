@@ -32,7 +32,9 @@ Pos :: struct {
 CTX :: struct {
 	window: ^SDL.Window, 
 	renderer: ^SDL.Renderer, 
-	player: Entity,
+	//player: Entity,
+	//item: Entity,
+	entities: [dynamic]Entity,
 
 	player_left_clips: [4]Pos, 
 	player_right_clips: [4]Pos, 
@@ -148,39 +150,44 @@ update :: proc() {
 	animation_speed := SDL.GetTicks() / 200 // GetTicks gets the ms since SDL was initialized
 	idx := animation_speed %% 4 // 0 - 3
 
-
+	// TODO: Animation system 
 	// Change the source sprite 
 	// then, move the destination rectangle 
 	if ctx.moving_left {
 		src := ctx.player_left_clips[idx]
-		ctx.player.source.x = src.x 
-		ctx.player.source.y = src.y 
-		ctx.player.dest.x -= speed
+		ctx.entities[0].source.x = src.x 
+		ctx.entities[0].source.y = src.y 
+		ctx.entities[0].dest.x -= speed
 	}
 	if ctx.moving_down {
 		src := ctx.player_down_clips[idx]
-		ctx.player.source.x = src.x
-		ctx.player.source.y = src.y
-		ctx.player.dest.y += speed
+		ctx.entities[0].source.x = src.x
+		ctx.entities[0].source.y = src.y
+		ctx.entities[0].dest.y += speed
 	}
 	if ctx.moving_right {
 		src := ctx.player_right_clips[idx]
-		ctx.player.source.x = src.x
-		ctx.player.source.y = src.y
-		ctx.player.dest.x += speed
+		ctx.entities[0].source.x = src.x
+		ctx.entities[0].source.y = src.y
+		ctx.entities[0].dest.x += speed
 	}
 	if ctx.moving_up {
 		src := ctx.player_up_clips[idx]
-		ctx.player.source.x = src.x
-		ctx.player.source.y = src.y 
-		ctx.player.dest.y -= speed
+		ctx.entities[0].source.x = src.x
+		ctx.entities[0].source.y = src.y 
+		ctx.entities[0].dest.y -= speed
 	}
 }
 
 draw :: proc() {
-	SDL.RenderCopy(ctx.renderer, ctx.player.tex, &ctx.player.source, &ctx.player.dest)
-	SDL.RenderPresent(ctx.renderer)
+	// Renderpresent per texture causes flickering
 	SDL.RenderClear(ctx.renderer)
+	number_entities := len(ctx.entities)
+	for i := 0; i < number_entities; i += 1 {
+		SDL.RenderCopy(ctx.renderer, ctx.entities[i].tex, &ctx.entities[i].source, &ctx.entities[i].dest)
+		
+	}
+	SDL.RenderPresent(ctx.renderer)
 }
 
 loop :: proc() {

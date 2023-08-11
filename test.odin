@@ -1,5 +1,5 @@
 package first_game
- 
+
 import "core:fmt"
 import "core:log"
 import "core:os"
@@ -18,9 +18,12 @@ main :: proc() {
 	
 	// Load image 
 	player_img : ^SDL.Surface = SDL_Image.Load("assets/bardo.png")
-
+	box_img : ^SDL.Surface = SDL_Image.Load("assets/box.png")
+	apple_img : ^SDL.Surface = SDL_Image.Load("assets/Apple.png")
+	
+	// TODO: Better texture loading
 	// Create the player entity 
-	ctx.player = Entity{
+	append(&ctx.entities, Entity{
 		tex = SDL.CreateTextureFromSurface(ctx.renderer, player_img), 
 		source = SDL.Rect{
 			// source sprite is down
@@ -35,8 +38,41 @@ main :: proc() {
 			w = 24 * 2,
 			h = 38 * 2,
 		},
-	}
+	})
 
+	// box item 
+	append(&ctx.entities, Entity{
+		tex = SDL.CreateTextureFromSurface(ctx.renderer, box_img),
+		source = SDL.Rect{
+			x = 0,
+			y = 0,
+			w = 28,
+			h = 24,
+		},
+		dest = SDL.Rect{
+			x = 400,
+			y = 400,
+			w = 28 * 3,
+			h = 24 * 3,
+		}, 
+	})
+
+	// apple
+	append(&ctx.entities, Entity{
+		tex = SDL.CreateTextureFromSurface(ctx.renderer, apple_img),
+		source = SDL.Rect{
+			x = 0,
+			y = 0,
+			w = 32,
+			h = 32,
+		},
+		dest = SDL.Rect{
+			x = 200,
+			y = 200,
+			w = 32 * 3,
+			h = 32 * 3,
+		}, 
+	})
 	// 1. Update a copy of scene 
 	// 2. Show copy 
 	// 3. Clear screen 
