@@ -32,7 +32,6 @@ main :: proc() {
 	wave_buffer : [^]u8
 	device : SDL.AudioDeviceID
 
-
 	if SDL.LoadWAV("assets/spring.wav", &wave_spec, &wave_buffer, &wave_length) == nil {
 		log.errorf("Couldn't open audio file.")
 	}
@@ -44,8 +43,7 @@ main :: proc() {
 		status := SDL.QueueAudio(device, wave_buffer, wave_length)
 		SDL.PauseAudioDevice(device, false)
 	}
-	defer SDL.FreeWAV(wave_buffer)
-	defer SDL.CloseAudioDevice(device)
+	defer cleanup_audio(wave_buffer, device)
 	
 	// Load image 
 	ground_img : ^SDL.Surface = SDL_Image.Load("assets/ground.png")

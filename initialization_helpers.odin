@@ -124,6 +124,11 @@ cleanup :: proc() {
 	SDL.Quit()
 }
 
+cleanup_audio :: proc(buffer: [^]u8, device: SDL.AudioDeviceID) {
+	SDL.FreeWAV(buffer)
+	SDL.CloseAudioDevice(device)
+}
+
 process_input :: proc() {
 	e: SDL.Event
 	for SDL.PollEvent(&e) {
