@@ -4,6 +4,7 @@ import "core:fmt"
 import "core:log"
 import "core:os"
 import SDL "vendor:sdl2"
+import MIX "vendor:sdl2/mixer"
 import SDL_Image "vendor:sdl2/image"
 
 PLAYER_W : i32 = 48
@@ -25,8 +26,29 @@ main :: proc() {
 		log.errorf("Initialization failed.")
 		os.exit(1)
 	}
+	log.infof("SDL initialized.")
 	defer cleanup()
 
+	if mus_res := MIX.Init(MIX.INIT_MP3); mus_res < 0 {
+		log.errorf("Couldn't initialize mp3.")
+	}
+	else {
+		log.infof("Mp3 initialized.")
+	}
+
+	if MIX.OpenAudio(MIX.DEFAULT_FREQUENCY, MIX.DEFAULT_FORMAT, 2, 4096) != 0 {
+		log.errorf("Couldn't open audio.")
+	}
+
+	mus : ^MIX.Music = MIX.LoadMUS("assets/spring.mp3")
+	if mus == nil {
+		log.errorf("Couldn't load music.")
+	}
+	else {
+		MIX.PlayMusic(mus, -1)
+	}
+	defer cleanup_music(mus)
+	/*
 	wave_spec : SDL.AudioSpec
 	wave_length : u32
 	wave_buffer : [^]u8
@@ -44,7 +66,7 @@ main :: proc() {
 		SDL.PauseAudioDevice(device, false)
 	}
 	defer cleanup_audio(wave_buffer, device)
-	
+	*/
 	// Load image 
 	ground_img : ^SDL.Surface = SDL_Image.Load("assets/ground.png")
 	player_img : ^SDL.Surface = SDL_Image.Load("assets/bardo.png")
