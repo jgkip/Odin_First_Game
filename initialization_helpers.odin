@@ -79,7 +79,7 @@ ctx := CTX{
 }
 
 init_sdl :: proc() -> (ok: bool) {
-	if sdl_res := SDL.Init(SDL.INIT_VIDEO); sdl_res < 0 {
+	if sdl_res := SDL.Init(SDL.INIT_VIDEO | SDL.INIT_AUDIO); sdl_res < 0 {
 		log.errorf("sdl2.init returned %v.", sdl_res)
 		return false 
 	}
