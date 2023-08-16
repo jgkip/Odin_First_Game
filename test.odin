@@ -49,7 +49,7 @@ main :: proc() {
 		text_color : SDL.Color = {100, 10, 200, 255}
 		text_surface := TTF.RenderText_Solid(font, "Text", text_color)
 		text_texture := SDL.CreateTextureFromSurface(ctx.renderer, text_surface)	
-		SDL.FreeSurface(text_surface)
+		SDL.FreeSurface(text_surface) // free pixel data since we saved it to a texture 
 		tex_rec : SDL.Rect
 		tex_rec.x = 0
 		tex_rec.y = 10
