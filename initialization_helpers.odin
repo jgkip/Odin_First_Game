@@ -25,6 +25,11 @@ Entity :: struct {
 	dest: SDL.Rect,   // place source sprite here 
 }
 
+Text :: struct {
+	tex: ^SDL.Texture, 
+	text_rect: SDL.Rect,
+}
+
 Pos :: struct {
 	x: i32, 
 	y: i32, 
@@ -36,6 +41,7 @@ CTX :: struct {
 	//player: Entity,
 	//item: Entity,
 	entities: [dynamic]Entity,
+	game_text: Text,
 
 	player_left_clips: [4]Pos, 
 	player_right_clips: [4]Pos, 
@@ -209,8 +215,8 @@ draw :: proc() {
 	number_entities := len(ctx.entities)
 	for i := 0; i < number_entities; i += 1 {
 		SDL.RenderCopy(ctx.renderer, ctx.entities[i].tex, &ctx.entities[i].source, &ctx.entities[i].dest)
-		
 	}
+	SDL.RenderCopy(ctx.renderer, ctx.game_text.tex, nil, &ctx.game_text.text_rect)
 	SDL.RenderPresent(ctx.renderer)
 }
 
