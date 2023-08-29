@@ -18,8 +18,8 @@ present_scene :: proc() {
 	SDL.RenderPresent(ctx.renderer)
 }
 
-load_texture :: proc(file_name: cstring) -> (^SDL.Surface) {
-	surf := SDL_Image.Load(file_name)
+load_texture :: proc(file_name: cstring) -> (^SDL.Texture) {
+	surf := SDL_Image.Load(ctx.renderer, file_name)
 	return surf
 }
 
