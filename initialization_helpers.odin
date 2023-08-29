@@ -203,17 +203,6 @@ update :: proc() {
 	}
 }
 
-draw :: proc() {
-	// Renderpresent per texture causes flickering
-	SDL.RenderClear(ctx.renderer)
-	number_entities := len(ctx.entities)
-	for i := 0; i < number_entities; i += 1 {
-		SDL.RenderCopy(ctx.renderer, ctx.entities[i].tex, &ctx.entities[i].source, &ctx.entities[i].dest)
-		
-	}
-	SDL.RenderPresent(ctx.renderer)
-}
-
 loop :: proc() {
 	for !ctx.should_close {
 		process_input()

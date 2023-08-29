@@ -68,11 +68,11 @@ main :: proc() {
 	defer cleanup_audio(wave_buffer, device)
 	*/
 	// Load image 
-	ground_img : ^SDL.Surface = SDL_Image.Load("assets/ground.png")
-	player_img : ^SDL.Surface = SDL_Image.Load("assets/bardo.png")
-	player_idle : ^SDL.Surface = SDL_Image.Load("assets/idle.png")
-	box_img : ^SDL.Surface = SDL_Image.Load("assets/box.png")
-	apple_img : ^SDL.Surface = SDL_Image.Load("assets/Apple.png")
+	ground_img := load_texture("assets/ground.png")
+	player_img := load_texture("assets/bardo.png")
+	player_idle := load_texture("assets/idle.png")
+	box_img := load_texture("assets/box.png")
+	apple_img := load_texture("assets/Apple.png")
 	
 	// TODO: Better texture loading
 	append(&ctx.entities, Entity{
