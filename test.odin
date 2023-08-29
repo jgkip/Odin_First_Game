@@ -6,6 +6,7 @@ import "core:os"
 import SDL "vendor:sdl2"
 import MIX "vendor:sdl2/mixer"
 import SDL_Image "vendor:sdl2/image"
+import TTF "vendor:sdl2/ttf"
 
 PLAYER_W : i32 = 48
 PLAYER_H : i32 = 48
@@ -28,6 +29,34 @@ main :: proc() {
 	}
 	log.infof("SDL initialized.")
 	defer cleanup()
+
+	if TTF.Init() < 0 {
+		log.errorf("Couldn't initialize ttf.")
+	}
+	else {
+		log.infof("ttf initialized.")
+	}
+	defer TTF.Quit()
+
+	font := TTF.OpenFont("assets/dogicapixel.ttf", 20)
+
+	if font == nil {
+		log.errorf("Couldn't open font.")
+	}
+	else {
+		log.infof("Font opened.")
+		// This is cursed. 
+		text_color : SDL.Color = {100, 10, 200, 255}
+		text_surface := TTF.RenderText_Solid(font, "Text", text_color)
+		text_texture := SDL.CreateTextureFromSurface(ctx.renderer, text_surface)	
+		SDL.FreeSurface(text_surface) // free pixel data since we saved it to a texture 
+		tex_rec : SDL.Rect
+		tex_rec.x = 0
+		tex_rec.y = 10
+		tex_rec.w = 100 
+		tex_rec.h = 20
+		ctx.game_text = Text{text_texture, tex_rec,}
+	}
 
 	if mus_res := MIX.Init(MIX.INIT_MP3); mus_res < 0 {
 		log.errorf("Couldn't initialize mp3.")
