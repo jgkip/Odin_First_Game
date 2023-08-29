@@ -7,16 +7,7 @@ import SDL "vendor:sdl2"
 import MIX "vendor:sdl2/mixer"
 import SDL_Image "vendor:sdl2/image"
 
-WINDOW_TITLE  :: "Game"
-WINDOW_X      := i32(400)
-WINDOW_Y      := i32(400)
-WINDOW_WIDTH  := i32(1280)
-WINDOW_HEIGHT := i32(720)
 WINDOW_FLAGS  :: SDL.WindowFlags{.SHOWN}
-CENTER_WINDOW :: true
-
-PLAYER_WIDTH : i32 = 24
-PLAYER_HEIGHT : i32 = 36 
 
 // Generic texture struct 
 Entity :: struct {
@@ -169,7 +160,6 @@ process_player_input :: proc() {
 }
 
 update :: proc() {
-	speed: i32 = 3
 	animation_speed := SDL.GetTicks() / 200 
 	idle_speed := SDL.GetTicks() / 60 // GetTicks gets the ms since SDL was initialized
 	idx := animation_speed %% 4 // 0 - 3
@@ -187,25 +177,25 @@ update :: proc() {
 		src := ctx.player_left_clips[idx]
 		ctx.entities[1].source.x = src.x 
 		ctx.entities[1].source.y = src.y 
-		ctx.entities[1].dest.x -= speed
+		ctx.entities[1].dest.x -= PLAYER_SPEED
 	}
 	if ctx.moving_down {
 		src := ctx.player_down_clips[idx]
 		ctx.entities[1].source.x = src.x
 		ctx.entities[1].source.y = src.y
-		ctx.entities[1].dest.y += speed
+		ctx.entities[1].dest.y += PLAYER_SPEED
 	}
 	if ctx.moving_right {
 		src := ctx.player_right_clips[idx]
 		ctx.entities[1].source.x = src.x
 		ctx.entities[1].source.y = src.y
-		ctx.entities[1].dest.x += speed
+		ctx.entities[1].dest.x += PLAYER_SPEED
 	}
 	if ctx.moving_up {
 		src := ctx.player_up_clips[idx]
 		ctx.entities[1].source.x = src.x
 		ctx.entities[1].source.y = src.y 
-		ctx.entities[1].dest.y -= speed
+		ctx.entities[1].dest.y -= PLAYER_SPEED
 	}
 }
 
