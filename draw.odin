@@ -31,7 +31,7 @@ draw :: proc() {
 		SDL.RenderCopy(ctx.renderer, ctx.entities[i].tex, &ctx.entities[i].source, &ctx.entities[i].dest)
 		
 	}
-	SDL.RenderPresent(ctx.renderer)
+	present_scene()
 }
 
 
