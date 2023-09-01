@@ -40,7 +40,7 @@ main :: proc() {
 		log.errorf("Couldn't load music.")
 	}
 	else {
-		MIX.PlayMusic(mus, -1)
+		play_music(mus, -1)
 	}
 	defer cleanup_music(mus)
 
