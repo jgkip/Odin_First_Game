@@ -95,25 +95,6 @@ init_sdl_audio :: proc() -> (ok: bool) {
 	return true
 }
 
-cleanup :: proc() {
-	SDL.DestroyWindow(ctx.window)
-	SDL.Quit()
-	log.infof("SDL closed.")
-}
-
-cleanup_audio :: proc(buffer: [^]u8, device: SDL.AudioDeviceID) {
-	SDL.FreeWAV(buffer)
-	SDL.CloseAudioDevice(device)
-	log.infof("Audio closed.")
-}
-
-cleanup_music :: proc(music: ^MIX.Music) {
-	MIX.FreeMusic(music)
-	MIX.CloseAudio()
-	MIX.Quit()
-	log.infof("Music closed.")
-}
-
 update :: proc() {
 	animation_speed := SDL.GetTicks() / 200 
 	idle_speed := SDL.GetTicks() / 60 // GetTicks gets the ms since SDL was initialized
