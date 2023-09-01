@@ -9,46 +9,6 @@ import SDL_Image "vendor:sdl2/image"
 
 WINDOW_FLAGS  :: SDL.WindowFlags{.SHOWN}
 
-// Generic texture struct 
-Entity :: struct {
-	tex: ^SDL.Texture, // image 
-	source: SDL.Rect, // sprite sheet 
-	dest: SDL.Rect,   // place source sprite here 
-}
-
-Text :: struct {
-	tex: ^SDL.Texture, 
-	text_rect: SDL.Rect,
-}
-
-Pos :: struct {
-	x: i32, 
-	y: i32, 
-}
-
-CTX :: struct {
-	window: ^SDL.Window, 
-	renderer: ^SDL.Renderer, 
-	//player: Entity,
-	//item: Entity,
-	entities: [dynamic]Entity,
-	game_text: Text,
-
-	player_left_clips: [4]Pos, 
-	player_right_clips: [4]Pos, 
-	player_up_clips: [4]Pos, 
-	player_down_clips: [4]Pos, 
-
-	idle_frames: [10]Pos,
-
-	moving_left: bool, 
-	moving_right: bool, 
-	moving_up: bool, 
-	moving_down: bool,
-
-	should_close: bool,
-}
-
 ctx := CTX{
 	player_left_clips = [4]Pos {
 		Pos{x= 0, y = PLAYER_HEIGHT},
@@ -114,8 +74,24 @@ init_sdl :: proc() -> (ok: bool) {
 		return false 
 	}
 	return true
-
 }
+
+init_sdl_audio :: proc() -> (ok: bool) {
+	if mus_res := MIX.Init(MIX.INIT_MP3); mus_res < 0 {
+		log.errorf("Couldn't initialize mp3.")
+		return false
+	}
+	else {
+		log.infof("Mp3 initialized.")
+	}
+
+	if MIX.OpenAudio(MIX.DEFAULT_FREQUENCY, MIX.DEFAULT_FORMAT, 2, 4096) != 0 {
+		log.errorf("Couldn't open audio.")
+		return false
+	}
+	return true
+}
+
 
 cleanup :: proc() {
 	SDL.DestroyWindow(ctx.window)
@@ -134,29 +110,6 @@ cleanup_music :: proc(music: ^MIX.Music) {
 	MIX.CloseAudio()
 	MIX.Quit()
 	log.infof("Music closed.")
-}
-
-process_input :: proc() {
-	e: SDL.Event
-	for SDL.PollEvent(&e) {
-		#partial switch(e.type) {
-			case .QUIT: 
-				ctx.should_close = true
-			case .KEYDOWN:
-				#partial switch(e.key.keysym.sym) {
-					case .ESCAPE:
-						ctx.should_close = true
-				}
-		}
-	}
-}
-
-process_player_input :: proc() {
-	state := SDL.GetKeyboardState(nil)
-	ctx.moving_left  =	state[SDL.Scancode.A] > 0
-	ctx.moving_down  =  state[SDL.Scancode.S] > 0
-	ctx.moving_right =  state[SDL.Scancode.D] > 0
-	ctx.moving_up    = 	state[SDL.Scancode.W] > 0
 }
 
 update :: proc() {

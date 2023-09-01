@@ -30,6 +30,20 @@ main :: proc() {
 	log.infof("SDL initialized.")
 	defer cleanup()
 
+	if aud := init_sdl_audio(); !aud {
+		os.exit(1)
+	}
+
+	// Audio initialization 
+	mus := load_music("assets/spring.mp3")
+	if mus == nil {
+		log.errorf("Couldn't load music.")
+	}
+	else {
+		MIX.PlayMusic(mus, -1)
+	}
+	defer cleanup_music(mus)
+
 	if TTF.Init() < 0 {
 		log.errorf("Couldn't initialize ttf.")
 	}
@@ -57,26 +71,7 @@ main :: proc() {
 		tex_rec.h = 20
 		ctx.game_text = Text{text_texture, tex_rec,}
 	}
-
-	if mus_res := MIX.Init(MIX.INIT_MP3); mus_res < 0 {
-		log.errorf("Couldn't initialize mp3.")
-	}
-	else {
-		log.infof("Mp3 initialized.")
-	}
-
-	if MIX.OpenAudio(MIX.DEFAULT_FREQUENCY, MIX.DEFAULT_FORMAT, 2, 4096) != 0 {
-		log.errorf("Couldn't open audio.")
-	}
-
-	mus : ^MIX.Music = MIX.LoadMUS("assets/spring.mp3")
-	if mus == nil {
-		log.errorf("Couldn't load music.")
-	}
-	else {
-		MIX.PlayMusic(mus, -1)
-	}
-	defer cleanup_music(mus)
+	
 	/*
 	wave_spec : SDL.AudioSpec
 	wave_length : u32

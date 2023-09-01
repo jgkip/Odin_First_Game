@@ -4,7 +4,6 @@ import "core:fmt"
 import "core:log"
 import "core:os"
 import SDL "vendor:sdl2"
-import MIX "vendor:sdl2/mixer"
 import SDL_Image "vendor:sdl2/image"
 
 /*
