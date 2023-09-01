@@ -19,7 +19,8 @@ Channels :: enum {
 }
 
 Sounds :: enum {
-	SND_PLAYER_MOVE
+	SND_PLAYER_MOVE, 
+	SND_MAX
 }
 
 
