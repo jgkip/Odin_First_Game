@@ -92,7 +92,6 @@ init_sdl_audio :: proc() -> (ok: bool) {
 	return true
 }
 
-
 cleanup :: proc() {
 	SDL.DestroyWindow(ctx.window)
 	SDL.Quit()
