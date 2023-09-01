@@ -89,6 +89,9 @@ init_sdl_audio :: proc() -> (ok: bool) {
 		log.errorf("Couldn't open audio.")
 		return false
 	}
+
+	MIX.AllocateChannels(MAX_SND_CHANNELS)
+
 	return true
 }
 
