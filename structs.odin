@@ -7,6 +7,7 @@ import SDL "vendor:sdl2"
 
 // Generic texture struct 
 Entity :: struct {
+	name: cstring,
 	tex: ^SDL.Texture, // image 
 	source: SDL.Rect, // sprite sheet 
 	dest: SDL.Rect,   // place source sprite here 
@@ -36,6 +37,8 @@ CTX :: struct {
 	player_down_clips: [4]Pos, 
 
 	idle_frames: [10]Pos,
+
+	knight_idle_frames: [10]Pos,
 
 	moving_left: bool, 
 	moving_right: bool, 

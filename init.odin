@@ -101,10 +101,15 @@ update :: proc() {
 	idx := animation_speed %% 4 // 0 - 3
 	idle_idx := idle_speed %% 10 // 0 - 3
 
+	// idle guy animation
 	src := ctx.idle_frames[idle_idx]
-	ctx.entities[2].source.x = src.x
-	ctx.entities[2].source.y = src.y
+	ctx.entities[3].source.x = src.x
+	ctx.entities[3].source.y = src.y
 	
+	// knight guy
+	knight_src := ctx.knight_idle_frames[idle_idx]
+	ctx.entities[2].source.x = knight_src.x
+	ctx.entities[2].source.y = knight_src.y
 
 	// TODO: Animation system 
 	// Change the source sprite 

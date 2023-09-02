@@ -11,15 +11,26 @@ import TTF "vendor:sdl2/ttf"
 PLAYER_W : i32 = 48
 PLAYER_H : i32 = 48
 
-load_frames_pos :: proc() {
+KNIGHT_W : i32 = 120
+KNIGHT_H : i32 = 80
+
+load_frames_pos :: proc(width : i32) {
 	num_frames := len(ctx.idle_frames)
 	for i := 0; i < num_frames; i += 1 {
-		ctx.idle_frames[i] = Pos{x = PLAYER_W * i32(i), y = 0}
+		ctx.idle_frames[i] = Pos{x = width * i32(i), y = 0}
+	}
+}
+
+load_knight_frames :: proc(width : i32) {
+	num_frames := len(ctx.idle_frames)
+	for i := 0; i < num_frames; i += 1 {
+		ctx.knight_idle_frames[i] = Pos{x = width * i32(i), y = 0}
 	}
 }
 
 main :: proc() {
-	load_frames_pos()
+	load_frames_pos(PLAYER_W)
+	load_knight_frames(KNIGHT_W)
 	// Initializing SDL stuff 
 	context.logger = log.create_console_logger()
 
@@ -72,34 +83,17 @@ main :: proc() {
 		ctx.game_text = Text{text_texture, tex_rec,}
 	}
 	
-	/*
-	wave_spec : SDL.AudioSpec
-	wave_length : u32
-	wave_buffer : [^]u8
-	device : SDL.AudioDeviceID
-
-	if SDL.LoadWAV("assets/spring.wav", &wave_spec, &wave_buffer, &wave_length) == nil {
-		log.errorf("Couldn't open audio file.")
-	}
-	else {
-		device = SDL.OpenAudioDevice(nil, false, &wave_spec, nil, false)
-		if device == 0 {
-			log.errorf("Sound device error.")
-		}
-		status := SDL.QueueAudio(device, wave_buffer, wave_length)
-		SDL.PauseAudioDevice(device, false)
-	}
-	defer cleanup_audio(wave_buffer, device)
-	*/
-	// Load image 
-	ground_img := load_texture("assets/ground.png")
-	player_img := load_texture("assets/bardo.png")
-	player_idle := load_texture("assets/idle.png")
-	box_img := load_texture("assets/box.png")
-	apple_img := load_texture("assets/Apple.png")
+	ground_img 			:= load_texture("assets/ground.png")
+	player_img 			:= load_texture("assets/bardo.png")
+	player_idle 		:= load_texture("assets/idle.png")
+	knight_idle 		:= load_texture("assets/knight_idle.png")
+	knight_run 			:= load_texture("assets/knight_run.png")
+	box_img 			:= load_texture("assets/box.png")
+	apple_img 			:= load_texture("assets/Apple.png")
 	
 	// TODO: Better texture loading
 	append(&ctx.entities, Entity{
+		name = "background",
 		tex = SDL.CreateTextureFromSurface(ctx.renderer, ground_img), 
 		source = SDL.Rect{
 			// source sprite is down
@@ -118,6 +112,7 @@ main :: proc() {
 
 	// Create the player entity 
 	append(&ctx.entities, Entity{
+		name = "player",
 		tex = SDL.CreateTextureFromSurface(ctx.renderer, player_img), 
 		source = SDL.Rect{
 			// source sprite is down
@@ -133,9 +128,28 @@ main :: proc() {
 			h = 38 * 2,
 		},
 	})
-
+	
+	// knight 
+	append(&ctx.entities, Entity{
+		name = "knight",
+		tex = SDL.CreateTextureFromSurface(ctx.renderer, knight_idle),
+		source = SDL.Rect{
+			x = 0,
+			y = 0, 
+			w = KNIGHT_W,
+			h = KNIGHT_H,
+		},
+		dest = SDL.Rect{
+			x = 450,
+			y = 450,
+			w = KNIGHT_W * 2,
+			h = KNIGHT_H * 2,
+		},
+	})
+	
 	// idle guy 
 	append(&ctx.entities, Entity{
+		name = "idle_guy",
 		tex = SDL.CreateTextureFromSurface(ctx.renderer, player_idle),
 		source = SDL.Rect{
 			// source sprite is down
@@ -154,6 +168,7 @@ main :: proc() {
 
 	// box item 
 	append(&ctx.entities, Entity{
+		name = "box",
 		tex = SDL.CreateTextureFromSurface(ctx.renderer, box_img),
 		source = SDL.Rect{
 			x = 0,
@@ -171,6 +186,7 @@ main :: proc() {
 
 	// apple
 	append(&ctx.entities, Entity{
+		name = "apple",
 		tex = SDL.CreateTextureFromSurface(ctx.renderer, apple_img),
 		source = SDL.Rect{
 			x = 0,
@@ -185,6 +201,17 @@ main :: proc() {
 			h = 32 * 3,
 		}, 
 	})
+
+	num_entities := len(ctx.entities)
+	for i := 0; i < num_entities; i += 1 {
+		log.infof(string(ctx.entities[i].name))
+	}
+
+	num_knight_frames := len(ctx.knight_idle_frames)
+	for i := 0; i < num_knight_frames; i += 1 {
+		fmt.println(ctx.knight_idle_frames[i])
+	}
+	
 	// 1. Update a copy of scene 
 	// 2. Show copy 
 	// 3. Clear screen 
