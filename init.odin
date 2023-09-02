@@ -34,6 +34,8 @@ ctx := CTX{
 		Pos{x = PLAYER_WIDTH * 2, y = 0},
 		Pos{x = PLAYER_WIDTH, y = 0},
 	}, 
+
+	// other entities here ahhhhhhh
 }
 
 init_sdl :: proc() -> (ok: bool) {
@@ -107,10 +109,11 @@ update :: proc() {
 	ctx.entities[3].source.y = src.y
 	
 	// knight guy
+	/*
 	knight_src := ctx.knight_idle_frames[idle_idx]
 	ctx.entities[2].source.x = knight_src.x
 	ctx.entities[2].source.y = knight_src.y
-
+	*/
 	// TODO: Animation system 
 	// Change the source sprite 
 	// then, move the destination rectangle 
@@ -131,6 +134,9 @@ update :: proc() {
 		ctx.entities[1].source.x = src.x
 		ctx.entities[1].source.y = src.y
 		ctx.entities[1].dest.x += PLAYER_SPEED
+		knight_src := ctx.knight_run_frames[idle_idx]
+		ctx.entities[2].source.x = knight_src.x
+		ctx.entities[2].source.y = knight_src.y
 	}
 	if ctx.moving_up {
 		src := ctx.player_up_clips[idx]

@@ -25,6 +25,7 @@ load_knight_frames :: proc(width : i32) {
 	num_frames := len(ctx.idle_frames)
 	for i := 0; i < num_frames; i += 1 {
 		ctx.knight_idle_frames[i] = Pos{x = width * i32(i), y = 0}
+		ctx.knight_run_frames[i] = Pos{x = width * i32(i), y = 0}
 	}
 }
 
@@ -205,11 +206,6 @@ main :: proc() {
 	num_entities := len(ctx.entities)
 	for i := 0; i < num_entities; i += 1 {
 		log.infof(string(ctx.entities[i].name))
-	}
-
-	num_knight_frames := len(ctx.knight_idle_frames)
-	for i := 0; i < num_knight_frames; i += 1 {
-		fmt.println(ctx.knight_idle_frames[i])
 	}
 	
 	// 1. Update a copy of scene 
