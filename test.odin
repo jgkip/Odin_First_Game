@@ -203,10 +203,6 @@ main :: proc() {
 		}, 
 	})
 
-	num_entities := len(ctx.entities)
-	for i := 0; i < num_entities; i += 1 {
-		log.infof(string(ctx.entities[i].name))
-	}
 	
 	// 1. Update a copy of scene 
 	// 2. Show copy 
