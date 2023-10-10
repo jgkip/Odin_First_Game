@@ -7,6 +7,7 @@ Texture loading and unloading
 How to determine which textures to preload/load and unload? 
 
 
+Small game (without levels) --> load everything at the start
 */
 
 load_texture :: proc(file_name: cstring) -> (^SDL.Surface) {
