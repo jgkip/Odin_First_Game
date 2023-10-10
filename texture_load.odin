@@ -15,3 +15,4 @@ load_texture :: proc(file_name: cstring) -> (^SDL.Surface) {
 	return surf
 }
 
+

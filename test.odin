@@ -30,6 +30,7 @@ load_knight_frames :: proc(width : i32) {
 }
 
 main :: proc() {
+	file_info_in_dir(os.get_current_directory())
 	file_info_in_dir("assets")
 	load_frames_pos(PLAYER_W)
 	load_knight_frames(KNIGHT_W)
