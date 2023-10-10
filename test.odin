@@ -100,8 +100,8 @@ main :: proc() {
 			// source sprite is down
 			x = 0, 
 			y = 0,
-			w = 256, 
-			h = 256,
+			w = ground_img.w, 
+			h = ground_img.h,
 		},
 		dest = SDL.Rect{
 			x = 0, 

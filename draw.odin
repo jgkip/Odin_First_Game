@@ -17,10 +17,7 @@ present_scene :: proc() {
 	SDL.RenderPresent(ctx.renderer)
 }
 
-load_texture :: proc(file_name: cstring) -> (^SDL.Surface) {
-	surf := SDL_Image.Load(file_name)
-	return surf
-}
+
 
 draw :: proc() {
 	// Renderpresent per texture causes flickering
