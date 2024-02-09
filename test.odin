@@ -30,8 +30,8 @@ load_knight_frames :: proc(width : i32) {
 }
 
 main :: proc() {
-	file_info_in_dir(os.get_current_directory())
-	file_info_in_dir("assets")
+	//file_info_in_dir(os.get_current_directory())
+	//file_info_in_dir("assets")
 	load_frames_pos(PLAYER_W)
 	load_knight_frames(KNIGHT_W)
 	// Initializing SDL stuff 
@@ -85,6 +85,8 @@ main :: proc() {
 		tex_rec.h = 20
 		ctx.game_text = Text{text_texture, tex_rec,}
 	}
+
+	// load_files("assets")
 	
 	ground_img 			:= load_texture("assets/ground.png")
 	player_img 			:= load_texture("assets/bardo.png")
@@ -94,6 +96,8 @@ main :: proc() {
 	box_img 			:= load_texture("assets/box.png")
 	apple_img 			:= load_texture("assets/Apple.png")
 	
+	fmt.println(player_idle.w)
+
 	// TODO: Better texture loading
 	append(&ctx.entities, Entity{
 		name = "background",
@@ -121,16 +125,26 @@ main :: proc() {
 			// source sprite is down
 			x = ctx.player_down_clips[1].x, 
 			y = ctx.player_down_clips[1].y,
-			w = 24, 
+			w = PLAYER_WIDTH, 
 			h = 38,
 		},
 		dest = SDL.Rect{
 			x = 100, 
 			y = 100, 
-			w = 24 * 2,
+			w = PLAYER_WIDTH * 2,
 			h = 38 * 2,
 		},
+		/*
+		hitbox = SDL.Rect{
+			x = 110,
+			y = 110,
+			w = (24 * 2) - 10,
+			h = (38 * 2) - 10,
+		},
+		*/
 	})
+	// player hitbox
+	//append(&ctx.debug_hitboxes, ctx.entities[1].hitbox)
 	
 	// knight 
 	append(&ctx.entities, Entity{
@@ -204,7 +218,7 @@ main :: proc() {
 			h = 32 * 3,
 		}, 
 	})
-
+	
 	
 	// 1. Update a copy of scene 
 	// 2. Show copy 

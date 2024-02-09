@@ -25,7 +25,11 @@ draw :: proc() {
 	number_entities := len(ctx.entities)
 	for i := 0; i < number_entities; i += 1 {
 		SDL.RenderCopy(ctx.renderer, ctx.entities[i].tex, &ctx.entities[i].source, &ctx.entities[i].dest)
-		
+
+		// Draw hitbox
+		SDL.SetRenderDrawColor(ctx.renderer, 255, 255, 255, 255)
+		//SDL.RenderDrawRect(ctx.renderer, &ctx.debug_hitboxes[0])
+		SDL.RenderDrawRect(ctx.renderer, &ctx.entities[1].dest)
 	}
 	present_scene()
 }

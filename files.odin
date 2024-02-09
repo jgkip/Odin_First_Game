@@ -54,3 +54,29 @@ file_info_in_dir :: proc(file_name: string) {
 	}
 }
 
+
+// TODO: figure out sprite dimensions
+
+/*
+load_files :: proc(dir_name: string) {
+    dir, err := os.open(file_name)
+    defer os.close(dir)
+    if err != os.ERROR_NONE {
+        // Print error to stderr and exit with errorcode
+        fmt.eprintln("Could not open directory for reading", err)
+        os.exit(1)
+    }
+    files: []os.File_Info
+    defer os.file_info_slice_delete(files)
+    files, err = os.read_dir(dir, -1)
+    if err != os.ERROR_NONE {
+        fmt.eprintln("Could not read directory", err)
+        os.exit(2)
+    }
+
+    for file in files {
+        append(&ctx.textures, load_texture(file))
+    }
+}
+*/
+

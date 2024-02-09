@@ -11,6 +11,7 @@ Entity :: struct {
 	tex: 	^SDL.Texture, // image 
 	source: SDL.Rect, // sprite sheet 
 	dest: 	SDL.Rect,   // place source sprite here 
+	hitbox: SDL.Rect,
 }
 
 Text :: struct {
@@ -23,12 +24,15 @@ Pos :: struct {
 	y: i32, 
 }
 
+
 CTX :: struct {
 	window: 	^SDL.Window, 
 	renderer: 	^SDL.Renderer, 
 	//player: Entity,
 	//item: Entity,
 	entities: 	[dynamic]Entity,
+	debug_hitboxes: [dynamic]SDL.Rect,
+	textures: [dynamic]^SDL.Surface,
 	game_text: 	Text,
 
 	player_left_clips: 		[4]Pos, 
